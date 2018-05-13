@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "compiler": "node parser && node pack.js"
+    "interpreter": "node parser && node pack.js",
+    "test": "node parser && node interpreterSource.js test.txt"
   },
   "author": "",
   "license": "ISC",
