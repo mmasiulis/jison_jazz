@@ -1,3 +1,3 @@
-const { exec } = require('pkg')
+const exec = require('pkg').exec;
 
-exec([ 'initiator.js', '--target', 'host', '--output', 'initiator.exe' ])
+exec(['compilerSource.js', '--target', 'host', '--output', 'compiler.exe']);
