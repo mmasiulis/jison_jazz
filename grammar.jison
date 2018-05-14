@@ -84,11 +84,13 @@ statement
 		{ $$ = new IntDeclarationExpression($2, $4); }
 	| BEGIN_ASSIGN WORD ASSIGNMENT integer ops END_ASSIGN
 		{ $$ = new AssignementExpression($2, $4, $5);}
+    | BEGIN_ASSIGN WORD ASSIGNMENT integer END_ASSIGN
+        { $$ = new AssignementExpression($2, $4);}
 	| KEYWORD_IF integer ops statements END_IF
 		{ $$ = new IfExpression($2, $3, $4); }
     | KEYWORD_IF BOOL statements END_IF
         { $$ = new IfBoolExpression($2, $3); }
-	| KEYWORD_WHILE WORD statements END_WHILE
+	| KEYWORD_WHILE variable statements END_WHILE
 		{ $$ = new WhileExpression($2, $3); }
 	| CALL_METHOD WORD
 		{ $$ = new CallExpression($2); }
@@ -103,10 +105,16 @@ ops
 		{ $$ = [$1]; }
 	;
 
+variable
+    : integer
+    | BOOL
+    ;
+
 integer
 	: NUMBER
 	| WORD
 	;
+
 
 op
 	: PLUS integer
@@ -160,7 +168,7 @@ function IfExpression (predicate, operation, ifStatements) {
 	this.ifStatements = ifStatements;
 }
 function IfBoolExpression (bool, ifStatements) {
- 	this.type = 'IfExpression';
+ 	this.type = 'IfBoolExpression';
  	this.bool = bool;
  	this.ifStatements = ifStatements;
  }

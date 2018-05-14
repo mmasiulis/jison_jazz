@@ -3,6 +3,14 @@ const bools = {
 	'nay': 'false'
 };
 
+function convertToBool(val){
+	if(val === 'yay' || val === 'nay') {
+    return bools[val];
+	}
+
+	return val;
+}
+
 function getIndentStr(level) {
 	let indentStr = '';
 
@@ -57,7 +65,7 @@ function IntDeclarationHandler(node, indent) {
 }
 
 function AssignementExpressionHandler(node, indent) {
-	let code = getIndentStr(indent) + 'var ' + node.name + ' = ';
+	let code = getIndentStr(indent) + node.name + ' = ';
 
 	if (node.operations && node.operations.length > 0) {
 		let operationsStr = node.initialValue;
@@ -89,10 +97,7 @@ function IfExpressionHandler(node, indent) {
 }
 
 function IfBoolExpressionHandler(node, indent) {
-
-  console.log('\n\nasdasdasd', bools[node.bool]);
-
-  let code = getIndentStr(indent) + 'if (' + bools[node.bool] + ') { \n';
+  let code = getIndentStr(indent) + 'if (' + convertToBool(node.bool) + ') { \n';
 
 
   code += node.ifStatements.map(function (node) {
@@ -107,7 +112,7 @@ function IfBoolExpressionHandler(node, indent) {
 }
 
 function WhileExpressionHandler(node, indent) {
-	let code = getIndentStr(indent) + 'while (' + node.predicate + ') {\n';
+	let code = getIndentStr(indent) + 'while (' + convertToBool(node.predicate) + ') {\n';
 
 	code += node.whileStatements.map(function (node) {
 		return HandleNode(node, indent + 1);

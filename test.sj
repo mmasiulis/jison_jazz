@@ -1,15 +1,20 @@
 MAIN (
+    var counter <= 0
     var a <= 0
     var b <= 1
 
-    FOOOR b
-        => a Is a + 1;
-        Scream a
+    FOOOR yay
+        var tmp <= b
+        => tmp Is tmp + a;
+        => a Is b;
+        => b Is tmp;
+        Scream tmp
 
-        If a > 5
+        => counter Is counter + 1;
+
+        If counter > 6
             Fin
         Fi
-
     TADAAA
 )
  ;A KILL
