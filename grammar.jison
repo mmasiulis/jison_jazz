@@ -17,9 +17,10 @@
 "{"             { return 'STATEMENT_START' }
 "}"             { return 'STATEMENT_END' }
 "If"            { return 'KEYWORD_IF' }
+"Fi"            { return 'END_IF' }
 "Else"          { return 'KEYWORD_ELSE' }
 "FOOOR"         { return 'KEYWORD_WHILE' }
-""         { return 'KEYWORD_FOR' }
+"TADAAA"         { return 'END_WHILE' }
 "~"             { return 'MATH_SQRT' }
 "MAIN"          { return 'BEGIN_MAIN' }
 "ENDMAIN"       { return 'END_MAIN' }
@@ -77,12 +78,12 @@ statement
 		{ $$ = new IntDeclarationExpression($2, $4); }
 	| BEGIN_ASSIGN WORD ASSIGNMENT integer ops END_ASSIGN
 		{ $$ = new AssignementExpression($2, $4, $5);}
-	| KEYWORD_IF  integer STATEMENT_START statements STATEMENT_END
-		{ $$ = new IfExpression($2, $4); }
-	| KEYWORD_IF integer STATEMENT_START statements STATEMENT_END ELSE statements
-		{ $$ = new IfExpression($2, $4, $4); }
-	| KEYWORD_WHILE WORD STATEMENT_START statements STATEMENT_END
-		{ $$ = new WhileExpression($2, $4); }
+	| KEYWORD_IF integer statements END_IF
+		{ $$ = new IfExpression($2, $3); }
+	| KEYWORD_IF integer statements ELSE statements END_IF
+		{ $$ = new IfExpression($2, $3, $5); }
+	| KEYWORD_WHILE WORD statements END_WHILE
+		{ $$ = new WhileExpression($2, $3); }
 	| CALL_METHOD WORD
 		{ $$ = new CallExpression($2); }
 	;

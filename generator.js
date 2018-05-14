@@ -1,7 +1,7 @@
 function getIndentStr(level) {
-	var indentStr = '';
+	let indentStr = '';
 
-	for (var i = 0; i < level; i++) {
+	for (let i = 0; i < level; i++) {
 		indentStr += '    ';
 	}
 
@@ -46,10 +46,10 @@ function IntDeclarationHandler(node, indent) {
 }
 
 function AssignementExpressionHandler(node, indent) {
-	var code = getIndentStr(indent) + 'var ' + node.name + ' = ';
+	let code = getIndentStr(indent) + 'var ' + node.name + ' = ';
 
 	if (node.operations && node.operations.length > 0) {
-		var operationsStr = node.initialValue;
+		let operationsStr = node.initialValue;
 
 		node.operations.forEach(function (operation) {
 			operationsStr = '(' + operationsStr + operation + ')';
@@ -64,7 +64,7 @@ function AssignementExpressionHandler(node, indent) {
 }
 
 function IfExpressionHandler(node, indent) {
-	var code = getIndentStr(indent) + 'if (' + node.predicate + ') { \n';
+	let code = getIndentStr(indent) + 'if (' + node.predicate + ') { \n';
 
 	code += node.ifStatements.map(function (node) {
 		return HandleNode(node, indent + 1);
@@ -88,7 +88,7 @@ function IfExpressionHandler(node, indent) {
 }
 
 function WhileExpressionHandler(node, indent) {
-	var code = getIndentStr(indent) + 'while (' + node.predicate + ') {\n';
+	let code = getIndentStr(indent) + 'while (' + node.predicate + ') {\n';
 
 	code += node.whileStatements.map(function (node) {
 		return HandleNode(node, indent + 1);
@@ -102,7 +102,7 @@ function WhileExpressionHandler(node, indent) {
 }
 
 function MethodDeclarationExpressionHandler(node, indent) {
-	var code = getIndentStr(indent) + 'function ' + node.name + ' () {\n';
+	let code = getIndentStr(indent) + 'function ' + node.name + ' () {\n';
 
 	code += node.innerStatements.map(function (node) {
 		return HandleNode(node, indent + 1);
@@ -120,9 +120,9 @@ function CallExpressionHandler(node, indent) {
 }
 
 function MainExpressionHandler(node, indent) {
-	var code = getIndentStr(indent) + '(function () {\n';
+	let code = getIndentStr(indent) + '(function () {\n';
 
-	var children = node.statements;
+	let children = node.statements;
 
 	children.forEach(function (child) {
 		code += HandleNode(child, indent + 1);
@@ -134,7 +134,7 @@ function MainExpressionHandler(node, indent) {
 }
 
 function RootHandler(nodes) {
-	var code = '(function () {\n "use strict";\n';
+	let code = '(function () {\n "use strict";\n';
 
 	nodes.forEach(function (node) {
 		code += HandleNode(node, 1);
