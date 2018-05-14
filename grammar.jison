@@ -47,7 +47,7 @@ program
         {
             return $1
                 .concat($5)
-                .concat(new MainExpression($3, @2, @4));
+                .concat(new MainExpression($4, @2, @4));
         }
     ;
 
