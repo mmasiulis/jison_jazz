@@ -16,5 +16,4 @@ MAIN (
             Fin
         Fi
     TADAAA
-)
- ;A KILL
+) ;A
