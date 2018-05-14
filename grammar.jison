@@ -20,7 +20,7 @@
 "Else"          { return 'KEYWORD_ELSE' }
 "While"         { return 'KEYWORD_WHILE' }
 "FOOOR"         { return 'KEYWORD_FOR' }
-'~'             { return 'MATH_SQRT' }
+"~"             { return 'MATH_SQRT' }
 "MAIN"          { return 'BEGIN_MAIN' }
 "ENDMAIN"       { return 'END_MAIN' }
 "Lemda"         { return 'METHOD_DECLARATION' }
@@ -44,7 +44,7 @@ program
     : methods BEGIN_MAIN LEFT_PREN statements RIGHT_PREN END_MAIN methods EOF
         {
             return $1
-                .concat($5)
+                .concat($7)
                 .concat(new MainExpression($4, @2, @4));
         }
     ;
