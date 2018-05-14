@@ -2,6 +2,9 @@
 %%
 
 \s+             /* ignore */
+
+<<EOF>>         { return 'EOF' }
+"KILL"          { return 'EOF' }
 [0-9]+          { return 'NUMBER' }
 "-"             { return 'MINUS' }
 "+"             { return 'PLUS' }
@@ -9,7 +12,6 @@
 "/"             { return 'DIVIDE' }
 "~%"            { return 'MODULO' }
 "=="            { return 'EQUAL' }
-">"             { return 'GREATER' }
 ":|"            { return 'OR' }
 ":&"            { return 'AND' }
 "("             { return 'LEFT_PREN' }
@@ -23,7 +25,7 @@
 "TADAAA"         { return 'END_WHILE' }
 "~"             { return 'MATH_SQRT' }
 "MAIN"          { return 'BEGIN_MAIN' }
-"ENDMAIN"       { return 'END_MAIN' }
+";A"       { return 'END_MAIN' }
 "Lemda"         { return 'METHOD_DECLARATION' }
 "Is"                    { return 'ASSIGNMENT' }
 "Scream"                { return 'PRINT' }
@@ -33,9 +35,9 @@
 "<="            { return 'SET_INITIAL_VALUE' }
 "=>"            { return 'BEGIN_ASSIGN' }
 ";"           { return 'END_ASSIGN' }
-[a-zA-Z]        { return 'WORD' }
-
-<<EOF>>         { return 'EOF' }
+">"             { return 'GREATER' }
+"<"             { return 'LESS' }
+[a-zA-Z]*        { return 'WORD' }
 /lex
 
 %start program
@@ -65,6 +67,8 @@ method
 statements
 	: statements statement
 		{ $$ = $1.concat($2); }
+	| statements method
+	    { $$ = $1.concat($2); }
 	|
 		{ $$ = []; }
 	;
@@ -115,6 +119,8 @@ op
 		{ $$ = ' == ' + $2; }
 	| GREATER integer
 		{ $$ = ' > ' + $2; }
+	| LESS integer
+		{ $$ = ' < ' + $2; }
 	| OR integer
 		{ $$ = ' || ' + $2; }
 	| AND integer
