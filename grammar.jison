@@ -2,10 +2,17 @@
 %%
 
 [^\n\S]+        /* ignore whitespace */
-[0-9]+          { return 'INT' }
+[0-9]+          { return 'NUMBER' }
 (\n|\;)         { return 'TERMINATOR' }
 "-"             { return 'MINUS' }
 "+"             { return 'PLUS' }
+"*"             { return 'MULTIPLY' }
+"/"             { return 'DIVIDE' }
+"~%"            { return 'MODULO' }
+"=="            { return 'EQUAL' }
+">"             { return 'GREATER' }
+":|"            { return 'OR' }
+":&"            { return 'AND' }
 '('             { return 'LEFT_PREN' }
 ')'             { return 'RIGHT_PREN' }
 [a-zA-Z]        { return 'WORD' }
@@ -20,9 +27,14 @@
 "MAIN"          { return 'BEGIN_MAIN' }
 "ENDMAIN"       { return 'END_MAIN' }
 "Lemda"         { return 'METHOD_DECLARATION' }
-"Is"            { return 'ASSIGNMENT' }
+"Is"                    { return 'ASSIGNMENT' }
 "Scream"                { return 'PRINT' }
-<<(?:[^"\\]|\\.)*>>	    {return 'STRING_LITTERAL'}
+\<\<(?:[^"\\]|\\.)*\>\>	    { return 'STRING_LITTERAL'}
+"{}"            { return 'CALL_METHOD' }
+"var"           { return 'DECLARE_INT' }
+"<="            { return 'SET_INITIAL_VALUE' }
+"=>"            { return 'BEGIN_ASSIGN' }
+"/|\"           { return 'END_ASSIGN' }
 
 /lex
 
@@ -64,16 +76,92 @@ statement
 		{ $$ = new PrintExpression($2); }
 	| PRINT STRING_LITTERAL
 		{ $$ = new PrintExpression($2); }
-	| DECLARE_INT VARIABLE SET_INITIAL_VALUE integer
+	| DECLARE_INT WORD SET_INITIAL_VALUE integer
 		{ $$ = new IntDeclarationExpression($2, $4); }
-	| BEGIN_ASSIGN VARIABLE SET_VALUE integer ops END_ASSIGN
+	| BEGIN_ASSIGN WORD SET_VALUE integer ops END_ASSIGN
 		{ $$ = new AssignementExpression($2, $4, $5);}
 	| IF integer statements END_IF
 		{ $$ = new IfExpression($2, $3); }
 	| IF integer statements ELSE statements END_IF
 		{ $$ = new IfExpression($2, $3, $5); }
-	| WHILE VARIABLE statements END_WHILE
+	| WHILE WORD statements END_WHILE
 		{ $$ = new WhileExpression($2, $3); }
-	| CALL_METHOD VARIABLE
+	| CALL_METHOD WORD
 		{ $$ = new CallExpression($2); }
 	;
+
+ops
+	: ops op
+		{ $$ = $1.concat($2); }
+	| op
+		{ $$ = [$1]; }
+	;
+
+integer
+	: NUMBER
+	| WORD
+	;
+
+op
+	: PLUS integer
+		{ $$ = ' + ' + $2; }
+	| MINUS integer
+		{ $$ = ' - ' + $2; }
+	| MULTIPLY integer
+		{ $$ = ' * ' + $2; }
+	| DIVIDE integer
+		{ $$ = ' / ' + $2; }
+	| MODULO integer
+		{ $$ = ' % ' + $2; }
+	| EQUAL integer
+		{ $$ = ' == ' + $2; }
+	| GREATER integer
+		{ $$ = ' > ' + $2; }
+	| OR integer
+		{ $$ = ' || ' + $2; }
+	| AND integer
+		{ $$ = ' && ' + $2; }
+;
+
+
+%%
+
+function MainExpression (statements) {
+	this.type = 'MainExpression';
+	this.statements = statements;
+}
+function PrintExpression (value) {
+	this.type = 'PrintExpression';
+	this.value = value;
+}
+function IntDeclarationExpression (name, value) {
+	this.type = 'IntDeclarationExpression';
+	this.name = name;
+	this.value = value;
+}
+function AssignementExpression (name, initialValue, operations) {
+	this.type = 'AssignementExpression';
+	this.name = name;
+	this.initialValue = initialValue;
+	this.operations = operations;
+}
+function IfExpression (predicate, ifStatements, elseStatements) {
+	this.type = 'IfExpression';
+	this.predicate = predicate;
+	this.ifStatements = ifStatements;
+	this.elseStatements = elseStatements;
+}
+function WhileExpression (predicate, whileStatements) {
+	this.type = 'WhileExpression';
+	this.predicate = predicate;
+	this.whileStatements = whileStatements;
+}
+function MethodDeclarationExpression (name, innerStatements) {
+	this.type = 'MethodDeclarationExpression';
+	this.name = name;
+	this.innerStatements = innerStatements;
+}
+function CallExpression (name) {
+	this.type = 'CallExpression';
+	this.name = name;
+}
