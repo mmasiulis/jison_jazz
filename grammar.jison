@@ -5,6 +5,8 @@
 
 <<EOF>>         { return 'EOF' }
 "KILL"          { return 'EOF' }
+"Fin"           { return 'BREAK' }
+(yay|nay)       { return 'BOOL' }
 [0-9]+          { return 'NUMBER' }
 "-"             { return 'MINUS' }
 "+"             { return 'PLUS' }
@@ -82,14 +84,16 @@ statement
 		{ $$ = new IntDeclarationExpression($2, $4); }
 	| BEGIN_ASSIGN WORD ASSIGNMENT integer ops END_ASSIGN
 		{ $$ = new AssignementExpression($2, $4, $5);}
-	| KEYWORD_IF integer statements END_IF
-		{ $$ = new IfExpression($2, $3); }
-	| KEYWORD_IF integer statements ELSE statements END_IF
-		{ $$ = new IfExpression($2, $3, $5); }
+	| KEYWORD_IF integer ops statements END_IF
+		{ $$ = new IfExpression($2, $3, $4); }
+    | KEYWORD_IF BOOL statements END_IF
+        { $$ = new IfBoolExpression($2, $3); }
 	| KEYWORD_WHILE WORD statements END_WHILE
 		{ $$ = new WhileExpression($2, $3); }
 	| CALL_METHOD WORD
 		{ $$ = new CallExpression($2); }
+    | BREAK
+        { $$ = new BreakExpression()}
 	;
 
 ops
@@ -149,12 +153,17 @@ function AssignementExpression (name, initialValue, operations) {
 	this.initialValue = initialValue;
 	this.operations = operations;
 }
-function IfExpression (predicate, ifStatements, elseStatements) {
+function IfExpression (predicate, operation, ifStatements) {
 	this.type = 'IfExpression';
 	this.predicate = predicate;
+	this.operation = operation[0];
 	this.ifStatements = ifStatements;
-	this.elseStatements = elseStatements;
 }
+function IfBoolExpression (bool, ifStatements) {
+ 	this.type = 'IfExpression';
+ 	this.bool = bool;
+ 	this.ifStatements = ifStatements;
+ }
 function WhileExpression (predicate, whileStatements) {
 	this.type = 'WhileExpression';
 	this.predicate = predicate;
@@ -168,4 +177,7 @@ function MethodDeclarationExpression (name, innerStatements) {
 function CallExpression (name) {
 	this.type = 'CallExpression';
 	this.name = name;
+}
+function BreakExpression () {
+	this.type = 'BreakExpression';
 }

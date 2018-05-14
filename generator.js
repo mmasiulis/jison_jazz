@@ -1,3 +1,8 @@
+const bools = {
+	'yay': 'true',
+	'nay': 'false'
+};
+
 function getIndentStr(level) {
 	let indentStr = '';
 
@@ -25,6 +30,9 @@ function HandleNode(node, indent) {
 		case 'IfExpression':
 			return IfExpressionHandler(node, indent);
 			break;
+		case 'IfBoolExpression':
+			return IfBoolExpressionHandler(node, indent);
+			break;
 		case 'WhileExpression':
 			return WhileExpressionHandler(node, indent);
 			break;
@@ -34,6 +42,9 @@ function HandleNode(node, indent) {
 		case 'CallExpression':
 			return CallExpressionHandler(node, indent);
 			break;
+    case 'BreakExpression':
+      return BreakExpressionHandler(node, indent);
+      break;
 	}
 }
 
@@ -64,7 +75,7 @@ function AssignementExpressionHandler(node, indent) {
 }
 
 function IfExpressionHandler(node, indent) {
-	let code = getIndentStr(indent) + 'if (' + node.predicate + ') { \n';
+	let code = getIndentStr(indent) + 'if (' + node.predicate + node.operation + ') { \n';
 
 	code += node.ifStatements.map(function (node) {
 		return HandleNode(node, indent + 1);
@@ -74,17 +85,25 @@ function IfExpressionHandler(node, indent) {
 
 	code += getIndentStr(indent) + '} \n';
 
-	if (node.elseStatements && node.elseStatements.length > 0) {
-		code += getIndentStr(indent) + 'else { \n';
-		code += node.elseStatements.map(function (node) {
-			return HandleNode(node, indent + 1);
-		}).reduce(function (block, line) {
-			return block + line;
-		}, '');
-		code += getIndentStr(indent) + '}\n';
-	}
-
 	return code;
+}
+
+function IfBoolExpressionHandler(node, indent) {
+
+  console.log('\n\nasdasdasd', bools[node.bool]);
+
+  let code = getIndentStr(indent) + 'if (' + bools[node.bool] + ') { \n';
+
+
+  code += node.ifStatements.map(function (node) {
+    return HandleNode(node, indent + 1);
+  }).reduce(function (block, line) {
+    return block + line;
+  }, '');
+
+  code += getIndentStr(indent) + '} \n';
+
+  return code;
 }
 
 function WhileExpressionHandler(node, indent) {
@@ -99,6 +118,10 @@ function WhileExpressionHandler(node, indent) {
 	code += getIndentStr(indent) + '}\n';
 
 	return code;
+}
+
+function BreakExpressionHandler(node, indent) {
+  return getIndentStr(indent) + 'break;\n';
 }
 
 function MethodDeclarationExpressionHandler(node, indent) {

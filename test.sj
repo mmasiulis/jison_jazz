@@ -1,12 +1,15 @@
 MAIN (
     var a <= 0
+    var b <= 1
 
-    Lemda ass Is ( => a Is a < 5 ; )
-
-
-    FOOOR ass
+    FOOOR b
         => a Is a + 1;
         Scream a
+
+        If a > 5
+            Fin
+        Fi
+
     TADAAA
 )
  ;A KILL
