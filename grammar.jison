@@ -1,9 +1,8 @@
 %lex
 %%
 
-[^\n\S]+        /* ignore whitespace */
+\s+             /* ignore */
 [0-9]+          { return 'NUMBER' }
-(\n|\;)         { return 'TERMINATOR' }
 "-"             { return 'MINUS' }
 "+"             { return 'PLUS' }
 "*"             { return 'MULTIPLY' }
@@ -48,7 +47,7 @@ program
         {
             return $1
                 .concat($5)
-                .concat(new yy.MainExpression($3, @2, @4));
+                .concat(new MainExpression($3, @2, @4));
         }
     ;
 

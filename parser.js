@@ -1,9 +1,9 @@
-var fs = require("fs");
-var jison = require("jison");
+const fs = require("fs");
+const jison = require("jison");
 
-var bnf = fs.readFileSync("grammar.jison", "utf8");
-var parser = new jison.Parser(bnf);
-var source = parser.generate();
+const bnf = fs.readFileSync("grammar.jison", "utf8");
+const parser = new jison.Parser(bnf);
+const source = parser.generate();
 
 fs.writeFile("./interpreterSource.js", source, function(err) {
   if(err) {
