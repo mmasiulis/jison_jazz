@@ -6,6 +6,6 @@ Some jazz code with jison parser
 
 ### How to run
 * Open console in root folder
-* Type npm i 
+* If it's the first time running the project, type npm i 
 * To get executable, run ```npm run pack``` 
 * For testing, use ```npm test```
