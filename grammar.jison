@@ -12,11 +12,10 @@
 ">"             { return 'GREATER' }
 ":|"            { return 'OR' }
 ":&"            { return 'AND' }
-'('             { return 'LEFT_PREN' }
-')'             { return 'RIGHT_PREN' }
-<<EOF>>         { return 'EOF' }
-'{'             { return 'STATEMENT_START' }
-'}'             { return 'STATEMENT_END' }
+"("             { return 'LEFT_PREN' }
+")"             { return 'RIGHT_PREN' }
+"{"             { return 'STATEMENT_START' }
+"}"             { return 'STATEMENT_END' }
 "If"            { return 'KEYWORD_IF' }
 "Else"          { return 'KEYWORD_ELSE' }
 "While"         { return 'KEYWORD_WHILE' }
@@ -35,9 +34,8 @@
 "/|\"           { return 'END_ASSIGN' }
 [a-zA-Z]        { return 'WORD' }
 
+<<EOF>>         { return 'EOF' }
 /lex
-
-%left "+" "-"
 
 %start program
 %%
