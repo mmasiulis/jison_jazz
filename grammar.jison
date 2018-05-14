@@ -32,7 +32,7 @@
 "var"           { return 'DECLARE_INT' }
 "<="            { return 'SET_INITIAL_VALUE' }
 "=>"            { return 'BEGIN_ASSIGN' }
-"/|\"           { return 'END_ASSIGN' }
+";"           { return 'END_ASSIGN' }
 [a-zA-Z]        { return 'WORD' }
 
 <<EOF>>         { return 'EOF' }
