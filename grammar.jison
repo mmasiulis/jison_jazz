@@ -75,7 +75,7 @@ statement
 		{ $$ = new PrintExpression($2); }
 	| DECLARE_INT WORD SET_INITIAL_VALUE integer
 		{ $$ = new IntDeclarationExpression($2, $4); }
-	| BEGIN_ASSIGN WORD SET_VALUE integer ops END_ASSIGN
+	| BEGIN_ASSIGN WORD ASSIGNMENT integer ops END_ASSIGN
 		{ $$ = new AssignementExpression($2, $4, $5);}
 	| IF integer statements END_IF
 		{ $$ = new IfExpression($2, $3); }

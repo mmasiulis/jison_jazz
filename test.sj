@@ -1,3 +1,4 @@
 MAIN (
     Scream <<STRINGAAAAAS>>
 ) ENDMAIN
+
