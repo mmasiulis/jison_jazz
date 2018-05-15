@@ -2,6 +2,9 @@ const parser = require('./interpreterSource.js').parser;
 const Transpiler = require('./generator.js');
 const fs = require('fs');
 
+const exec = require('pkg').exec;
+
+
 if (process.argv[2]) {
 	const fileName = process.argv[2];
 
@@ -13,6 +16,9 @@ if (process.argv[2]) {
 		// console.log(JSON.stringify(AST))
 		const code = Transpiler.getJSCode(AST);
 		fs.writeFileSync(fileName + '.js', code);
+
+		exec([`${fileName}.js`, '--target', 'host', '--output', `${fileName.split('.')[0]}.exe`]);
+
 	} else {
 		console.log('File must have sj extension');
 	}
