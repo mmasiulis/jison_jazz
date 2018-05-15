@@ -1,14 +1,21 @@
-const fs = require("fs");
-const jison = require("jison");
+const parser = require('./interpreterSource.js').parser;
+const Transpiler = require('./generator.js');
+const fs = require('fs');
 
-const bnf = fs.readFileSync("grammar.jison", "utf8");
-const parser = new jison.Parser(bnf);
-const source = parser.generate();
+if (process.argv[2]) {
+	const fileName = process.argv[2];
 
-fs.writeFile("./interpreterSource.js", source, function(err) {
-  if(err) {
-    return console.log(err);
-  }
+	const ext = fileName.split('.');
 
-  console.log("Interpreter source was saved!");
-});
+	if (ext.length > 0 && ext[ext.length - 1] === 'sj') {
+		const data = fs.readFileSync(fileName, 'utf-8');
+		const AST = parser.parse(data);
+		// console.log(JSON.stringify(AST))
+		const code = Transpiler.getJSCode(AST);
+		fs.writeFileSync(fileName + '.js', code);
+	} else {
+		console.log('File must have sj extension');
+	}
+} else {
+	console.log('You must specify a file');
+}

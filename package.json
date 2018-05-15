@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "interpreter": "node parser && node pack.js",
-    "test": "node parser && node interpreterSource.js test.txt"
+    "test": "node parser && node interpreterSource.js test.txt",
+    "start": "node pack.js"
   },
   "author": "",
   "license": "ISC",
