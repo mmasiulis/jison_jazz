@@ -3,6 +3,10 @@ MAIN (
     var a <= 0
     var b <= 1
 
+    Scream <<Fibbonachi skaiciai>>
+    Scream a
+    Scream b
+
     FOOOR yay
         var tmp <= b
         => tmp Is tmp + a;
